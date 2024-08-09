@@ -10,26 +10,26 @@ const Output = ({ out, isMinimized, onMinimize }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (isMinimized) {
-      gsap.to(containerRef.current, {
-        duration: 0.8,
-        x: '200%',
-        y: '-15%',
-        scaleX: 0.3,
-        scaleY: 0.3,
-        opacity: 0,
-      });
-    } else {
-      gsap.to(containerRef.current, {
-        duration: 0.8,
-        x: 0,
-        y: 0,
-        scaleX: 1,
-        scaleY: 1,
-        opacity: 1,
-      });
-    }
+    // Handle minimization animation with GSAP
+    gsap.to(containerRef.current, {
+      duration: 0.8,
+      x: isMinimized ? '200%' : 0,
+      y: isMinimized ? '-15%' : 0,
+      scaleX: isMinimized ? 0.3 : 1,
+      scaleY: isMinimized ? 0.3 : 1,
+      opacity: isMinimized ? 0 : 1,
+    });
   }, [isMinimized]);
+
+  useEffect(() => {
+    // Handle maximization animation with GSAP
+    gsap.to(containerRef.current, {
+      duration: 0.8,
+      width: isMaximized ? '100vw' : '40vw',
+      height: isMaximized ? '100vh' : '16rem', // 16rem = 64px (h-64) default height
+      ease: 'easeOut',
+    });
+  }, [isMaximized]);
 
   const toggleMinimize = () => {
     onMinimize();
@@ -56,7 +56,7 @@ const Output = ({ out, isMinimized, onMinimize }) => {
       dragTransition={{ bounceStiffness: 100, bounceDamping: 10 }}
       onMouseDown={handleClick} // Update zIndex when component is clicked
       onBlur={handleBlur} // Reset zIndex if needed when focus is lost
-      className={`mb-7 ${isMaximized ? 'w-screen h-screen' : 'w-[40vw] h-64 md:h-96'} rounded-lg shadow-lg bg-slate-200`}
+      className={`mb-7 rounded-lg shadow-lg bg-slate-200`} // Basic styles without width/height
       style={{ position: 'relative', zIndex }} // Apply dynamic zIndex
     >
       <div className="ps-2 bg-zinc-700 flex justify-between items-center rounded-t-lg">

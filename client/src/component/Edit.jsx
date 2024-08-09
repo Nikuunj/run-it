@@ -51,12 +51,22 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
     }
   }, [isMinimized]);
 
+  useEffect(() => {
+    gsap.to(containerRef.current, {
+      duration: 0.8,
+      width: isMaximized ? '100vw' : '40vw', // Adjust width as needed
+      height: isMaximized ? '100vh' : '24rem', // Adjust height as needed
+      ease: 'easeOut',
+    });
+  }, [isMaximized]);
+
   const toggleMinimize = () => {
-    onMinimize(pre => !pre);
+    onMinimize((prev) => !prev);
   };
 
   const toggleMaximize = () => {
     setIsMaximized((prev) => !prev);
+    handleClick(); // Ensure the component is brought to the front
   };
 
   const handleClick = () => {
@@ -76,8 +86,8 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
       dragTransition={{ bounceStiffness: 100, bounceDamping: 10 }}
       onMouseDown={handleClick} // Update zIndex when editor is clicked
       onBlur={handleBlur} // Reset zIndex if needed when focus is lost
-      className={`mb-7 ${isMaximized ? 'w-screen h-screen' : 'h-96'} rounded-lg shadow-lg`}
-      style={{ position: 'relative', zIndex }} // Apply dynamic zInde
+      className={`mb-7 rounded-lg shadow-lg bg-slate-200`} // Basic styles without width/height
+      style={{ position: 'relative', zIndex }} // Apply dynamic zIndex
     >
       <div className="ps-2 bg-zinc-700 flex justify-between items-center rounded-t-lg">
         <span>{name}</span>

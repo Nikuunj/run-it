@@ -104,7 +104,7 @@ const ThreeInOne = () => {
     return (
       <button
         key={key}
-        className={`duration-300 inline fixed top-${10 + index * 14} right-4 px-4 py-2 text-lg text-white ${colorMap[key]}`}
+        className={`duration-300 inline absolute top-${10 + index * 14} mt-5 right-4 px-4 py-2 text-lg text-white ${colorMap[key]}`}
         onClick={() => handleMinimize(key)}
       >
         {language}
