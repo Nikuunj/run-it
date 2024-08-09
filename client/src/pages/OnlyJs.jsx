@@ -4,6 +4,7 @@ import BG from '../component/BG';
 import Output from '../component/Output';  // Import the Output component
 
 function OnlyJs() {
+  const url = import.meta.env.BACK_END;
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [isMinimized, setIsMinimized] = useState({
@@ -13,7 +14,7 @@ function OnlyJs() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    fetch('http://localhost:8080/run', {
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ function OnlyJs() {
   return (
     <>
       <div className="container  min-h-screen">
-        <div className='min-h-[80vh]'>
+        <div className=''>
           {render}
         </div>
         <button id="run" onClick={handleClick} className='block'>Run Code</button>
@@ -83,9 +84,9 @@ function OnlyJs() {
           onMinimize={() => handleMinimize('output')} 
         />
       </div>
-      <BG />
+      <BG print='js'/>
       <button
-        className={`duration-300 ${isMinimized.javascript ? 'inline' : 'hidden'} fixed top-10 right-4 px-4 py-2 text-lg text-white hover:bg-amber-400 bg-amber-600`}
+        className={`duration-300 ${isMinimized.javascript ? 'inline' : 'hidden'} fixed top-36 right-4 px-4 py-2 text-lg text-white hover:bg-amber-400 bg-amber-600`}
         onClick={() => handleMinimize('javascript')}
       >
         JS

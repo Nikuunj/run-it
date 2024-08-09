@@ -1,9 +1,9 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "server" : "nodemon app.js",
+    "server": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,10 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "nodemon": "^3.1.4",
-    "vm2": "^3.9.19"
+    "nodemon": "^3.1.3"
   }
 }

@@ -5,7 +5,6 @@ import OnlyJs from './pages/OnlyJs';
 import ThreeInOne from './pages/ThreeInOne';
 import { useRef } from "react";
 import AppContext from './component/AppContext';
-import AnimatedComponent from './pages/AnimatedComponent';
 
 function App() {
   const constraintsRef = useRef(null);
@@ -33,12 +32,8 @@ function App() {
           element: <OnlyJs />
         },
         {
-          path: "/3",
+          path: "/merge",
           element: <ThreeInOne />
-        },
-        {
-          path:'/a',
-          element:<AnimatedComponent/>
         },
       ],
     },

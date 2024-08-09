@@ -104,7 +104,7 @@ const ThreeInOne = () => {
         {render}
         <Output out={output} isMinimized={isMinimized.output} onMinimize={() => handleMinimize('output')} />
       </div>
-      <BG />
+      <BG print='Html, CSS & Js'/>
 
       <button
         className={`duration-300 z-40 ${isMinimized.javascript ? 'inline' : 'hidden'} fixed top-10 right-4 px-4 py-2 text-lg text-white hover:bg-amber-400 bg-amber-600`}
@@ -125,7 +125,7 @@ const ThreeInOne = () => {
         CSS
       </button>
       <button
-        className={`duration-300 z-40 ${isMinimized.output ? 'inline' : 'hidden'} fixed top-48 mt-2 right-4 px-4 py-2 text-lg text-white hover:bg-green-600 bg-green-800`}
+        className={`duration-300 z-40 ${isMinimized.output ? 'inline' : 'hidden'} fixed top-48 mt-4 right-4 px-4 py-2 text-lg text-white hover:bg-green-600 bg-green-800`}
         onClick={() => handleMinimize('output')}
       >
         Output
