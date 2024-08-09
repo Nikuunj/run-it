@@ -5,6 +5,7 @@ import OnlyJs from './pages/OnlyJs';
 import ThreeInOne from './pages/ThreeInOne';
 import { useRef } from "react";
 import AppContext from './component/AppContext';
+import { motion } from 'framer-motion';
 
 function App() {
   const constraintsRef = useRef(null);
@@ -12,11 +13,11 @@ function App() {
   const Layout = () => (
     <div className='bg-zinc-800 overflow-hidden max-h-fit text-slate-200'>
       <Header />
-    <div className="container overflow-hidden" ref={constraintsRef}>
+    <motion.div className="container overflow-hidden" ref={constraintsRef}>
       <AppContext.Provider value={constraintsRef}>
         <Outlet />
       </AppContext.Provider>
-    </div>
+    </motion.div>
       <Footer />
     </div>
   );

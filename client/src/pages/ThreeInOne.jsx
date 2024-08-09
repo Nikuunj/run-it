@@ -16,9 +16,11 @@ const ThreeInOne = () => {
   });
 
   const handleChange = (value, language) => {
-    if (language === 'html') setHtml(value);
-    if (language === 'css') setCss(value);
-    if (language === 'javascript') setJs(value);
+    if (typeof value === 'string') {
+      if (language === 'html') setHtml(value);
+      if (language === 'css') setCss(value);
+      if (language === 'javascript') setJs(value);
+    }
   };
 
   const handleMinimize = (language) => {
@@ -31,24 +33,18 @@ const ThreeInOne = () => {
   const data = [
     {
       name: "HTML",
-      height: "200",
-      width: "400",
       language: "html",
       value: html,
       onChange: handleChange,
     },
     {
       name: "CSS",
-      height: "200",
-      width: "400",
       language: "css",
       value: css,
       onChange: handleChange,
     },
     {
       name: "JavaScript",
-      height: "200",
-      width: "400",
       language: "javascript",
       value: js,
       onChange: handleChange,
@@ -68,8 +64,6 @@ const ThreeInOne = () => {
     <Edit 
       key={index}
       name={val.name}
-      height={val.height}
-      width={val.width}
       language={val.language}
       value={val.value}
       onChange={val.onChange}
@@ -98,38 +92,34 @@ const ThreeInOne = () => {
     return () => clearTimeout(timeout);
   }, [html, css, js]);
 
+  const minimizedButtons = Object.keys(isMinimized).filter(key => isMinimized[key]).map((key, index) => {
+    const language = key.charAt(0).toUpperCase() + key.slice(1);
+    const colorMap = {
+      html: 'bg-red-800 hover:bg-red-600',
+      css: 'bg-blue-800 hover:bg-blue-600',
+      javascript: 'bg-amber-600 hover:bg-amber-400',
+      output: 'bg-green-800 hover:bg-green-600',
+    };
+
+    return (
+      <button
+        key={key}
+        className={`duration-300 inline fixed top-${10 + index * 14} right-4 px-4 py-2 text-lg text-white ${colorMap[key]}`}
+        onClick={() => handleMinimize(key)}
+      >
+        {language}
+      </button>
+    );
+  });
+
   return (
     <div className="editor-container p-4 overflow-hidden">
-      <div className='editors grid gap-4 grid-cols-1 min-h-[50vh] md:grid-cols-2 lg:grid-cols-3'>
+      <div className='editors grid gap-4 grid-cols-1 min-h-[50vh] z-40 md:grid-cols-2 lg:grid-cols-3'>
         {render}
         <Output out={output} isMinimized={isMinimized.output} onMinimize={() => handleMinimize('output')} />
       </div>
-      <BG print='Html, CSS & Js'/>
-
-      <button
-        className={`duration-300 z-40 ${isMinimized.javascript ? 'inline' : 'hidden'} fixed top-10 right-4 px-4 py-2 text-lg text-white hover:bg-amber-400 bg-amber-600`}
-        onClick={() => handleMinimize('javascript')}
-      >
-        JS
-      </button>
-      <button
-        className={`duration-300 z-40 ${isMinimized.html ? 'inline' : 'hidden'} fixed top-24 right-4 px-4 py-2 text-lg text-white hover:bg-red-600 bg-red-800`}
-        onClick={() => handleMinimize('html')}
-      >
-        HTML
-      </button>
-      <button
-        className={`duration-300 z-40 ${isMinimized.css ? 'inline' : 'hidden'} fixed top-36 mt-2 right-4 px-4 py-2 text-lg text-white hover:bg-blue-600 bg-blue-800`}
-        onClick={() => handleMinimize('css')}
-      >
-        CSS
-      </button>
-      <button
-        className={`duration-300 z-40 ${isMinimized.output ? 'inline' : 'hidden'} fixed top-48 mt-4 right-4 px-4 py-2 text-lg text-white hover:bg-green-600 bg-green-800`}
-        onClick={() => handleMinimize('output')}
-      >
-        Output
-      </button>
+      <BG print='</HTML CSS & Js>' />
+      {minimizedButtons}
     </div>
   );
 };

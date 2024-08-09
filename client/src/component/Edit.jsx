@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Editor, { loader } from '@monaco-editor/react';
+import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
-import Draggable from 'gsap/Draggable';
 import AppContext from './AppContext';
-
-gsap.registerPlugin(Draggable);
 
 function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
   const constraintsRef = useContext(AppContext);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [zIndex, setZIndex] = useState(1); // State to manage zIndex
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -31,89 +30,73 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
   }, []);
 
   useEffect(() => {
-    const animationProps = isMinimized
-      ? {
-          duration: 0.8,
-          x: '200%',
-          y: '-15%',
-          scaleX: 0.3,
-          scaleY: 0.3,
-          opacity: 0,
-          visibility: 'hidden',
-          width: 0,
-          height: 0,
-          ease: 'power2.out',
-        }
-      : {
-          duration: 0.8,
-          x: 0,
-          y: 0,
-          scaleX: 1,
-          scaleY: 1,
-          opacity: 1,
-          visibility: 'visible',
-          width: isMaximized ? '98vw' : '40vw',
-          height: isMaximized ? '100vh' : '24rem',
-          ease: 'power2.out',
-        };
-
-    gsap.to(containerRef.current, animationProps);
-  }, [isMinimized, isMaximized]);
-
-  useEffect(() => {
-    const draggable = Draggable.create(containerRef.current, {
-      bounds: constraintsRef.current,
-      throwProps: true,
-      onDrag: () => {},
-      onDragEnd: () => {
-        gsap.to(containerRef.current, {
-          duration: 0.5,
-          ease: 'power2.out',
-          x: gsap.getProperty(containerRef.current, 'x'),
-          y: gsap.getProperty(containerRef.current, 'y'),
-        });
-      },
-    });
-
-    return () => {
-      draggable[0].kill();
-    };
-  }, [constraintsRef]);
+    if (isMinimized) {
+      gsap.to(containerRef.current, {
+        duration: 0.8,
+        x: '200%',
+        y: '-15%',
+        scaleX: 0.3,
+        scaleY: 0.3,
+        opacity: 0,
+      });
+    } else {
+      gsap.to(containerRef.current, {
+        duration: 0.8,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        opacity: 1,
+      });
+    }
+  }, [isMinimized]);
 
   const toggleMinimize = () => {
-    onMinimize((prev) => !prev);
+    onMinimize(pre => !pre);
   };
 
   const toggleMaximize = () => {
     setIsMaximized((prev) => !prev);
   };
 
+  const handleClick = () => {
+    // Bring this editor to the front by setting its zIndex higher
+    setZIndex(10);
+  };
+
+  const handleBlur = () => {
+    setZIndex(1);
+  };
+
   return (
-    <div
+    <motion.div
       ref={containerRef}
-      className={`mb-7 rounded-lg shadow-lg z-50 ${isMinimized ? 'overflow-hidden' : ''}`}
-      style={{ position: 'relative', overflow: 'hidden' }}
+      drag
+      dragConstraints={constraintsRef}
+      dragTransition={{ bounceStiffness: 100, bounceDamping: 10 }}
+      onMouseDown={handleClick} // Update zIndex when editor is clicked
+      onBlur={handleBlur} // Reset zIndex if needed when focus is lost
+      className={`mb-7 ${isMaximized ? 'w-screen h-screen' : 'h-96'} rounded-lg shadow-lg`}
+      style={{ position: 'relative', zIndex }} // Apply dynamic zInde
     >
-      <div className={`ps-2 bg-zinc-700 flex justify-between items-center rounded-t-lg ${isMinimized ? 'flex-col' : ''}`}>
+      <div className="ps-2 bg-zinc-700 flex justify-between items-center rounded-t-lg">
         <span>{name}</span>
-        <div className={`flex ${isMinimized ? 'flex-col' : ''}`}>
+        <div className="flex">
           <button
             onClick={toggleMinimize}
             className="bg-zinc-700 text-white px-4 hover:bg-slate-600 text-2xl"
-            style={{ zIndex: 20 }}
           >
             <sup>_</sup>
           </button>
           <button
             onClick={toggleMaximize}
             className="bg-zinc-700 text-white hover:bg-slate-600 px-4 rounded-e-lg rounded-b-none"
-            style={{ zIndex: 20 }}
           >
             {isMaximized ? '◱' : '▢'}
           </button>
         </div>
       </div>
-      <div className="block z-50 h-full rounded-b-lg">
+      <div className="block h-full rounded-b-lg">
         <Editor
           language={language}
           height="100%"
@@ -127,7 +110,7 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
           }}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
 

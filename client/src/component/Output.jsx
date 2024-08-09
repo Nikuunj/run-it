@@ -1,99 +1,85 @@
-import React, { useEffect, useRef, useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
-import Draggable from 'gsap/Draggable';
 import AppContext from './AppContext';
-
-gsap.registerPlugin(Draggable);
 
 const Output = ({ out, isMinimized, onMinimize }) => {
   const constraintsRef = useContext(AppContext);
-  const containerRef = useRef(null);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [zIndex, setZIndex] = useState(1); // State to manage zIndex
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    const draggable = Draggable.create(containerRef.current, {
-      bounds: constraintsRef.current,
-      throwProps: true,
-      trigger: containerRef.current,
-      onDrag: () => {},
-      onDragEnd: () => {
-        gsap.to(containerRef.current, {
-          duration: 0.1,
-          ease: 'power2.out',
-          x: gsap.getProperty(containerRef.current, 'x'),
-          y: gsap.getProperty(containerRef.current, 'y'),
-        });
-      },
-    });
+    if (isMinimized) {
+      gsap.to(containerRef.current, {
+        duration: 0.8,
+        x: '200%',
+        y: '-15%',
+        scaleX: 0.3,
+        scaleY: 0.3,
+        opacity: 0,
+      });
+    } else {
+      gsap.to(containerRef.current, {
+        duration: 0.8,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        opacity: 1,
+      });
+    }
+  }, [isMinimized]);
 
-    return () => {
-      draggable[0].kill();
-    };
-  }, [constraintsRef]);
-
-  useEffect(() => {
-    const animationProps = isMinimized
-      ? {
-          duration: 0.8,
-          x: '200%',
-          y: '-15%',
-          scaleX: 0.3,
-          scaleY: 0.3,
-          opacity: 0,
-          visibility: 'hidden',
-          width: 0,
-          height: 0,
-          ease: 'power2.out',
-        }
-      : {
-          duration: 0.8,
-          x: 0,
-          y: 0,
-          scaleX: 1,
-          scaleY: 1,
-          opacity: 1,
-          visibility: 'visible',
-          width: isMaximized ? '98vw' : '40vw',
-          height: isMaximized ? '100vh' : '24rem',
-          ease: 'power2.out',
-        };
-
-    gsap.to(containerRef.current, animationProps);
-  }, [isMinimized, isMaximized]);
+  const toggleMinimize = () => {
+    onMinimize();
+  };
 
   const toggleMaximize = () => {
     setIsMaximized((prev) => !prev);
   };
 
+  const handleClick = () => {
+    // Bring this component to the front by setting its zIndex higher
+    setZIndex(10);
+  };
+
+  const handleBlur = () => {
+    setZIndex(1);
+  };
+
   return (
-    <div
+    <motion.div
       ref={containerRef}
-      className={`mb-7 rounded-[9px] shadow-lg  w-full bg-slate-200 h-64 md:h-96`}
-      style={{ overflow: 'hidden', position:'relative' }}
+      drag
+      dragConstraints={constraintsRef}
+      dragTransition={{ bounceStiffness: 100, bounceDamping: 10 }}
+      onMouseDown={handleClick} // Update zIndex when component is clicked
+      onBlur={handleBlur} // Reset zIndex if needed when focus is lost
+      className={`mb-7 ${isMaximized ? 'w-screen h-screen' : 'w-[40vw] h-64 md:h-96'} rounded-lg shadow-lg bg-slate-200`}
+      style={{ position: 'relative', zIndex }} // Apply dynamic zIndex
     >
-      <div className={`ps-2 bg-zinc-700 flex justify-between items-center rounded-t-[9px]`}>
+      <div className="ps-2 bg-zinc-700 flex justify-between items-center rounded-t-lg">
         <span>Output</span>
-        <div className={`flex`}>
+        <div className="flex">
           <button
-            onClick={onMinimize}
+            onClick={toggleMinimize}
             className="bg-zinc-700 text-white px-4 hover:bg-slate-600 text-2xl"
-            
           >
             <sup>_</sup>
           </button>
           <button
             onClick={toggleMaximize}
-            className="bg-zinc-700 text-white hover:bg-slate-600 px-4 rounded-e-[9px] rounded-b-none"
-            
+            className="bg-zinc-700 text-white hover:bg-slate-600 px-4 rounded-e-lg rounded-b-none"
           >
             {isMaximized ? '◱' : '▢'}
           </button>
         </div>
       </div>
-      <div className="block h-full rounded-b-[9px] text-black">
+      <div className="block h-full z-0 rounded-b-lg">
         {out()}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
