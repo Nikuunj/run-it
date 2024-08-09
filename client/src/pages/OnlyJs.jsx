@@ -4,17 +4,18 @@ import BG from '../component/BG';
 import Output from '../component/Output';  // Import the Output component
 
 function OnlyJs() {
-  const url = import.meta.env.BACK_END;
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [isMinimized, setIsMinimized] = useState({
     javascript: false,
     output: false,
   });
+  const [loading, setLoading] = useState(false);  // New state for loading
 
   const handleClick = (e) => {
     e.preventDefault();
-    fetch(url, {
+    setLoading(true);  // Set loading to true when request starts
+    fetch('https://run-it-31la.onrender.com/run', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,6 +28,9 @@ function OnlyJs() {
       })
       .catch((error) => {
         setOutput('Error: ' + error.message);
+      })
+      .finally(() => {
+        setLoading(false);  // Set loading to false when request completes
       });
   };
 
@@ -72,11 +76,13 @@ function OnlyJs() {
 
   return (
     <>
-      <div className="container  min-h-screen">
-        <div className=''>
+      <div className="container min-h-screen">
+        <div>
           {render}
         </div>
-        <button id="run" onClick={handleClick} className='block'>Run Code</button>
+        <button id="run" onClick={handleClick} className='block'>
+          {loading ? 'Running...' : 'Run Code'}  {/* Show loading text */}
+        </button>
         
         <Output 
           out={outputData} 
@@ -97,6 +103,11 @@ function OnlyJs() {
       >
         Output
       </button>
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="text-white text-xl">Loading...</div>  {/* Loading indicator */}
+        </div>
+      )}
     </>
   );
 }

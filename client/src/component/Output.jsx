@@ -76,7 +76,7 @@ const Output = ({ out, isMinimized, onMinimize }) => {
           </button>
         </div>
       </div>
-      <div className="block h-full z-0 rounded-b-lg">
+      <div className="block h-full z-0 rounded-b-lg text-black">
         {out()}
       </div>
     </motion.div>

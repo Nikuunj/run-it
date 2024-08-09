@@ -54,7 +54,7 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
   useEffect(() => {
     gsap.to(containerRef.current, {
       duration: 0.8,
-      width: isMaximized ? '100vw' : '40vw', // Adjust width as needed
+      width: isMaximized ? '100vw' : '32vw', // Adjust width as needed
       height: isMaximized ? '100vh' : '24rem', // Adjust height as needed
       ease: 'easeOut',
     });
@@ -66,7 +66,7 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
 
   const toggleMaximize = () => {
     setIsMaximized((prev) => !prev);
-    handleClick(); // Ensure the component is brought to the front
+    // handleClick();
   };
 
   const handleClick = () => {
@@ -94,13 +94,13 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
         <div className="flex">
           <button
             onClick={toggleMinimize}
-            className="bg-zinc-700 text-white px-4 hover:bg-slate-600 text-2xl"
+            className="bg-zinc-700 z-50 text-white px-4 hover:bg-slate-600 text-2xl"
           >
             <sup>_</sup>
           </button>
           <button
             onClick={toggleMaximize}
-            className="bg-zinc-700 text-white hover:bg-slate-600 px-4 rounded-e-lg rounded-b-none"
+            className="bg-zinc-700 z-50 text-white hover:bg-slate-600 px-4 rounded-e-lg rounded-b-none"
           >
             {isMaximized ? '◱' : '▢'}
           </button>
