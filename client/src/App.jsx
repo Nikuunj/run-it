@@ -11,9 +11,9 @@ function App() {
   const constraintsRef = useRef(null);
 
   const Layout = () => (
-    <div className='bg-zinc-800 overflow-hidden max-h-fit text-slate-200'>
+    <div className='bg-zinc-800 text-slate-200'>
       <Header />
-    <motion.div className="container overflow-hidden" ref={constraintsRef}>
+    <motion.div className="container overflow-hidden mt-[9.5vh]" ref={constraintsRef}>
       <AppContext.Provider value={constraintsRef}>
         <Outlet />
       </AppContext.Provider>

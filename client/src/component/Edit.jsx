@@ -7,7 +7,7 @@ import AppContext from './AppContext';
 function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
   const constraintsRef = useContext(AppContext);
   const [isMaximized, setIsMaximized] = useState(false);
-  const [zIndex, setZIndex] = useState(1); // State to manage zIndex
+  const [zIndex, setZIndex] = useState(1);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +28,27 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
       });
     });
   }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isSmallScreen = window.innerWidth < 510;
+      const width = isSmallScreen ? '90vw' : isMaximized ? '100vw' : '32vw';
+      const height = isSmallScreen ? '70vh' : isMaximized ? '100vh' : '24rem';
+      gsap.to(containerRef.current, {
+        duration: 0.8,
+        width,
+        height,
+        ease: 'easeOut',
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMaximized]);
 
   useEffect(() => {
     if (isMinimized) {
@@ -51,26 +72,15 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
     }
   }, [isMinimized]);
 
-  useEffect(() => {
-    gsap.to(containerRef.current, {
-      duration: 0.8,
-      width: isMaximized ? '100vw' : '32vw', // Adjust width as needed
-      height: isMaximized ? '100vh' : '24rem', // Adjust height as needed
-      ease: 'easeOut',
-    });
-  }, [isMaximized]);
-
   const toggleMinimize = () => {
     onMinimize((prev) => !prev);
   };
 
   const toggleMaximize = () => {
     setIsMaximized((prev) => !prev);
-    // handleClick();
   };
 
   const handleClick = () => {
-    // Bring this editor to the front by setting its zIndex higher
     setZIndex(10);
   };
 
@@ -84,10 +94,10 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
       drag
       dragConstraints={constraintsRef}
       dragTransition={{ bounceStiffness: 100, bounceDamping: 10 }}
-      onMouseDown={handleClick} // Update zIndex when editor is clicked
-      onBlur={handleBlur} // Reset zIndex if needed when focus is lost
-      className={`mb-7 rounded-lg shadow-lg bg-slate-200`} // Basic styles without width/height
-      style={{ position: 'relative', zIndex }} // Apply dynamic zIndex
+      onMouseDown={handleClick}
+      onBlur={handleBlur}
+      className={`mb-7 rounded-lg shadow-lg bg-slate-200`}
+      style={{ position: 'relative', zIndex }}
     >
       <div className="ps-2 bg-zinc-700 flex justify-between items-center rounded-t-lg">
         <span>{name}</span>
@@ -106,7 +116,7 @@ function Edit({ name, language, value, onChange, isMinimized, onMinimize }) {
           </button>
         </div>
       </div>
-      <div className="block h-full rounded-b-lg">
+      <div className="block h-full w-full rounded-b-lg">
         <Editor
           language={language}
           height="100%"

@@ -76,11 +76,11 @@ function OnlyJs() {
 
   return (
     <>
-      <div className="container min-h-screen">
+      <div className="container min-h-screen ms-2">
         <div>
           {render}
         </div>
-        <button id="run" onClick={handleClick} className='block'>
+        <button id="run" onClick={handleClick} className='block bg-zinc-700 hover:bg-zinc-800 border-zinc-700 border-2 duration-300 relative top-3 mb-5 rounded-lg px-4 py-2 text-xl font-semibold'>
           {loading ? 'Running...' : 'Run Code'}  {/* Show loading text */}
         </button>
         
