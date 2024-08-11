@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   return (
-    <div className='backdrop-blur-sm bg-white/5 text-2xl py-2 px-2 fixed top-4 left-[10vw] rounded-lg z-50 w-[80vw] text-zinc-400 font-bold drop-shadow-2xl shadow-zinc-500 flex justify-between'>
+    <div className='backdrop-blur-sm bg-white/5 text-2xl py-2 px-2 fixed top-4 left-[10vw] rounded-lg z-50 w-[80vw] text-zinc-400 font-bold drop-shadow-2xl shadow-zinc-500 flex justify-between '>
       <p>
       <Link to='/'>
       Run-it
