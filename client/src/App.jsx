@@ -1,4 +1,5 @@
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Header from './component/Header';
 import Footer from './component/Footer';
 import OnlyJs from './pages/OnlyJs';
@@ -19,6 +20,7 @@ function App() {
       </AppContext.Provider>
     </motion.div>
       <Footer />
+      <Analytics />
     </div>
   );
 
