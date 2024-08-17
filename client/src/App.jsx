@@ -19,7 +19,9 @@ function App() {
         <Outlet />
       </AppContext.Provider>
     </motion.div>
+    <div>
       <Footer />
+    </div>
       <Analytics />
     </div>
   );

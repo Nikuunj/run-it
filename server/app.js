@@ -9,7 +9,7 @@ app.use(express.static('public'));
 app.use(cors());
 
 app.get('/', (req, res) => {
-    res.send('hello fucker');
+    res.send('hello there!');
 });
 
 app.post('/run', (req, res) => {
@@ -19,7 +19,18 @@ app.post('/run', (req, res) => {
         timeout: 1000,  
         sandbox: {
             console: {
-                log: (...args) => output.push(args.join(' '))
+                log: (...args) => {
+                    args = args.map(arg => {
+                        if (Array.isArray(arg)) {
+                            return '[' + arg.map(item => JSON.stringify(item)).join(', ') + ']';
+                        } else if (typeof arg === 'object') {
+                            return JSON.stringify(arg, null, 2);
+                        } else {
+                            return arg;
+                        }
+                    });
+                    output.push(args.join(' '));
+                }
             }
         }     
     });
