@@ -76,7 +76,7 @@ function OnlyJs() {
 
   return (
     <>
-      <div className="container min-h-screen ms-2">
+      <div className="container min-h-screen min-w-[100vw] ms-2">
         <div>
           {render}
         </div>
