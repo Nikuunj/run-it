@@ -107,25 +107,25 @@ const ThreeInOne = () => {
         </button>
         <BG print='</HTML CSS & Js>' />
         <button
-          className={`duration-300 ${isMinimized.html ? 'inline' : 'hidden'} fixed top-20 right-4 px-4 py-2 text-lg text-white hover:bg-red-600 bg-red-800`}
+          className={`duration-300 z-50 ${isMinimized.html ? 'inline' : 'hidden'} fixed top-20 right-8 px-4 py-2 text-lg text-white hover:bg-red-600 bg-red-800`}
           onClick={() => handleMinimize('html')}
         >
           HTML
         </button>
         <button
-          className={`duration-300 ${isMinimized.css ? 'inline' : 'hidden'} fixed top-32 right-4 px-4 py-2 text-lg text-white hover:bg-blue-600 bg-blue-800`}
+          className={`duration-300 z-50 ${isMinimized.css ? 'inline' : 'hidden'} fixed top-32 right-8 px-4 py-2 text-lg text-white hover:bg-blue-600 bg-blue-800`}
           onClick={() => handleMinimize('css')}
         >
           CSS
         </button>
         <button
-          className={`duration-300 ${isMinimized.javascript ? 'inline' : 'hidden'} fixed top-44 right-4 px-4 py-2 text-lg text-white hover:bg-amber-400 bg-amber-600`}
+          className={`duration-300 z-50 ${isMinimized.javascript ? 'inline' : 'hidden'} fixed top-44 right-8 px-4 py-2 text-lg text-white hover:bg-amber-400 bg-amber-600`}
           onClick={() => handleMinimize('javascript')}
         >
           JS
         </button>
         <button
-          className={`duration-300 ${isMinimized.output ? 'inline' : 'hidden'} fixed top-56 right-4 px-4 py-2 text-lg text-white hover:bg-green-600 bg-green-800`}
+          className={`duration-300 z-50 ${isMinimized.output ? 'inline' : 'hidden'} fixed top-56 right-8 px-4 py-2 text-lg text-white hover:bg-green-600 bg-green-800`}
           onClick={() => handleMinimize('output')}
         >
           Output
