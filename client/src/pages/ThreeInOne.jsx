@@ -14,6 +14,7 @@ const ThreeInOne = () => {
     javascript: false,
     output: false,
   });
+  const [loading, setLoading] = useState(false); // New state for loading
 
   const handleChange = (value, language) => {
     if (typeof value === 'string') {
@@ -73,6 +74,7 @@ const ThreeInOne = () => {
   ));
 
   useEffect(() => {
+    setLoading(true); // Start loading
     const timeout = setTimeout(() => {
       setSrcDoc(`
         <!DOCTYPE html>
@@ -87,40 +89,54 @@ const ThreeInOne = () => {
         <script>${js}</script>
         </html>
       `);
+      setLoading(false); // Stop loading
     }, 250);
 
     return () => clearTimeout(timeout);
   }, [html, css, js]);
 
-  const minimizedButtons = Object.keys(isMinimized).filter(key => isMinimized[key]).map((key, index) => {
-    const language = key.charAt(0).toUpperCase() + key.slice(1);
-    const colorMap = {
-      html: 'bg-red-800 hover:bg-red-600',
-      css: 'bg-blue-800 hover:bg-blue-600',
-      javascript: 'bg-amber-600 hover:bg-amber-400',
-      output: 'bg-green-800 hover:bg-green-600',
-    };
-
-    return (
-      <button
-        key={key}
-        className={`duration-300 inline absolute top-${10 + index * 14} ${index > 1 && 'hidden '} mt-5 right-4 px-4 py-2 text-lg text-white ${colorMap[key]}`}
-        onClick={() => handleMinimize(key)}
-      >
-        {language}
-      </button>
-    );
-  });
-
   return (
-    <div className="editor-container p-4 overflow-hidden">
-      <div className='editors grid gap-4 grid-cols-1 min-h-[50vh] z-40 md:grid-cols-2 lg:grid-cols-3'>
-        {render}
-        <Output out={output} isMinimized={isMinimized.output} onMinimize={() => handleMinimize('output')} />
+    <>
+      <div className="editor-container p-4 overflow-hidden min-h-screen min-w-[100vw] ms-2">
+        <div className='editors grid gap-4 grid-cols-1 min-h-[50vh] z-40 md:grid-cols-2 lg:grid-cols-3'>
+          {render}
+          <Output out={output} isMinimized={isMinimized.output} onMinimize={() => handleMinimize('output')} />
+        </div>
+        <button id="run" onClick={() => {}} className='block bg-zinc-700 hover:bg-zinc-800 border-zinc-700 border-2 duration-300 relative top-3 mb-5 rounded-lg px-4 py-2 text-xl font-semibold'>
+          {loading ? 'Running...' : 'Run Code'}  {/* Show loading text */}
+        </button>
+        <BG print='</HTML CSS & Js>' />
+        <button
+          className={`duration-300 ${isMinimized.html ? 'inline' : 'hidden'} fixed top-20 right-4 px-4 py-2 text-lg text-white hover:bg-red-600 bg-red-800`}
+          onClick={() => handleMinimize('html')}
+        >
+          HTML
+        </button>
+        <button
+          className={`duration-300 ${isMinimized.css ? 'inline' : 'hidden'} fixed top-32 right-4 px-4 py-2 text-lg text-white hover:bg-blue-600 bg-blue-800`}
+          onClick={() => handleMinimize('css')}
+        >
+          CSS
+        </button>
+        <button
+          className={`duration-300 ${isMinimized.javascript ? 'inline' : 'hidden'} fixed top-44 right-4 px-4 py-2 text-lg text-white hover:bg-amber-400 bg-amber-600`}
+          onClick={() => handleMinimize('javascript')}
+        >
+          JS
+        </button>
+        <button
+          className={`duration-300 ${isMinimized.output ? 'inline' : 'hidden'} fixed top-56 right-4 px-4 py-2 text-lg text-white hover:bg-green-600 bg-green-800`}
+          onClick={() => handleMinimize('output')}
+        >
+          Output
+        </button>
+        {loading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+            <div className="text-white text-xl">Loading...</div>  {/* Loading indicator */}
+          </div>
+        )}
       </div>
-      <BG print='</HTML CSS & Js>' />
-      {minimizedButtons}
-    </div>
+    </>
   );
 };
 
